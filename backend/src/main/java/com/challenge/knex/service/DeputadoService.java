@@ -3,7 +3,8 @@ package com.challenge.knex.service;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,26 +37,19 @@ public class DeputadoService {
             String[] linha;
             csvReader.readNext();
 
-            System.out.println("Iniciando importação do CSV...");
-
             int maxLinhas = 5000;
             int contador = 0;
 
             while((linha = csvReader.readNext()) != null) {
                 if (contador >= maxLinhas) {
-                    System.out.println("Limite de " + maxLinhas + " linhas atingido. Parando importação.");
                     break;
                 }
                 contador++;
-
-                System.out.println("Linha lida: " + Arrays.toString(linha));
                 if(linha.length < 27) {
-                    System.out.println("Linha ignorada por ter menos de 27 colunas: " + Arrays.toString(linha));
                     continue;
                 }
                 String cpf = linha[1];
                 if(cpf == null || cpf.isBlank()) {
-                    System.out.println("Linha ignorada por CPF vazio: " + Arrays.toString(linha));
                     continue;
                 }
 
@@ -64,13 +58,14 @@ public class DeputadoService {
                 String partido = linha [6];
                 
                 String fornecedor = linha[12];
-                String dataEmissaoStr = linha[17];
-                String valorLiquidoStr = linha[20];
-                String urlDocumento = linha[26];
+                String dataEmissaoStr = linha[16];
+                String valorLiquidoStr = linha[19];
+                String urlDocumento = linha[31];
 
                 LocalDateTime dataEmissao;
-                try{
-                    dataEmissao = LocalDateTime.parse(dataEmissaoStr + "T00:00:00");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+                try {
+                    dataEmissao = LocalDateTime.parse(dataEmissaoStr, formatter);
                 } catch (Exception e) {
                     dataEmissao = null;
                 }
@@ -109,4 +104,7 @@ public class DeputadoService {
         }
     }
 
+    public List<Deputado> listarDeputadosUf(String uf) {
+        return deputadoRepository.findByUfIgnoreCase(uf);
+    }
 }
