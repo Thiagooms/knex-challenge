@@ -1,6 +1,7 @@
 package com.challenge.knex.model;
 
 import jakarta.persistence.*;
+
 import java.util.List;
 
 @Entity

@@ -1,7 +1,7 @@
 package com.challenge.knex.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "despesa")
@@ -10,8 +10,8 @@ public class Despesa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private LocalDate dataEmissao;
+    
+    private LocalDateTime dataEmissao;
     private String fornecedor;
     private Double valorLiquido;
     private String urlDocumento;
@@ -28,11 +28,11 @@ public class Despesa {
         this.id = id;
     }
 
-    public LocalDate getDataEmissao() {
+    public LocalDateTime getDataEmissao() {
         return dataEmissao;
     }
 
-    public void setDataEmissao(LocalDate dataEmissao) {
+    public void setDataEmissao(LocalDateTime dataEmissao) {
         this.dataEmissao = dataEmissao;
     }
 
